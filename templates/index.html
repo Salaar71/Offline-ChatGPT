@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatGPT Local Server</title>
+</head>
+<body>
+    <h1>ChatGPT Local Server</h1>
+    <form action="/get_reply" method="POST">
+        <input type="text" name="user_input" placeholder="Enter your message">
+        <input type="submit" value="Send">
+    </form>
+    <div id="reply"></div>
+
+    <script>
+        window.onload = function () {
+            document.querySelector('form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                var user_input = document.querySelector('input[name="user_input"]').value;
+                fetch('/get_reply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'user_input=' + encodeURIComponent(user_input)
+                })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (reply) {
+                    document.getElementById('reply').innerHTML = '<p><strong>ChatGPT:</strong> ' + reply + '</p>';
+                });
+            });
+        };
+    </script>
+</body>
+</html>
